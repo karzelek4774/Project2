@@ -60,7 +60,7 @@ function initialChart(year,county){
 
     var countyFilter=fireData.filter(obj=>obj.FIRE_YEAR==year && obj.COUNTY==county)
 
-    console.log(countyFilter)
+    // console.log(countyFilter)
     countsYearCounty={}
 
 
@@ -116,7 +116,7 @@ function initialChart(year,county){
     var countyData=fireData.map(county=>county.COUNTY)
 
 
-    console.log(countyData)
+    // console.log(countyData)
 
     countyData.forEach(name=>{
 
@@ -152,126 +152,134 @@ function initialChart(year,county){
     var countyNames=countyBar.map(p=>p[0])
     var countyValues=countyBar.map(p=>p[1])
 
-    console.log(countyNames)
-    console.log(countyValues)
+    // console.log(countyNames)
+    // console.log(countyValues)
 
     var data = [
     {
       x: countyNames,
       y: countyValues,
       type: 'bar',
-      name:"Wildwire by County from 2005 to 2015"
+      
     }
     ];
+
+    var layout = {
+      title: "Wildwire by County from 2005 to 2015",
+      
+    };
   
-    Plotly.newPlot('chart', data);
+    Plotly.newPlot('chart', data,layout);
 
 
 
-   sizeCounter={}
-   var sizeData=fireData.map(size=>size.FIRE_SIZE_CLASS)
+    //  sizeCounter={}
+    //  var sizeData=fireData.map(size=>size.FIRE_SIZE_CLASS)
 
 
-    // console.log(sizeData)
+    //   // console.log(sizeData)
 
-   sizeData.forEach(siz=>{
+    //  sizeData.forEach(siz=>{
 
     
 
-    if(siz in sizeCounter)
+    //   if(siz in sizeCounter)
 
 
-      sizeCounter[siz]+=1
+    //     sizeCounter[siz]+=1
 
 
-    else
+    //   else
 
-        sizeCounter[siz]=0
-
-
-   })
-
-   console.log(sizeCounter)
+    //       sizeCounter[siz]=0
 
 
-   var sizeGrade=Object.keys(sizeCounter)
+    //  })
+
+    // //  console.log(sizeCounter)
 
 
-   var sizeValues=Object.values(sizeCounter)
+    //  var sizeGrade=Object.keys(sizeCounter)
 
 
-   console.log(sizeGrade)
-   console.log(sizeValues)
+    //  var sizeValues=Object.values(sizeCounter)
 
 
-   var trace1 = {
-    x: sizeGrade,
-    y: sizeValues,
-    text: sizeGrade,
-    mode: 'markers',
-    marker: {
-      color: ['rgb(93, 164, 214)', 'rgb(255, 144, 14)',  'rgb(44, 160, 101)', 'rgb(255, 65, 54)'],
-      size:sizeValues.map(o=>o/50)
-    }
-    };
+    // //  console.log(sizeGrade)
+    // //  console.log(sizeValues)
+
+
+    //  var trace1 = {
+    //   x: sizeGrade,
+    //   y: sizeValues,
+    //   text: sizeGrade,
+    //   mode: 'markers',
+    //   marker: {
+    //     color: ['rgb(93, 164, 214)', 'rgb(255, 144, 14)',  'rgb(44, 160, 101)', 'rgb(255, 65, 54)'],
+    //     size:sizeValues.map(o=>o/50)
+    //   }
+    //   };
   
-    var data = [trace1];
+    //   var data = [trace1];
   
-    var layout = {
-    title: 'Wildfire by size A-G from 2005-2015',
-    showlegend: false,
-    height: 600,
-    width: 600
-    };
-  
-    Plotly.newPlot('chart2', data, layout);
+   //   var layout = {
+    //   title: 'Wildfire by size A-G from 2005-2015',
+    //   showlegend: false,
+    //   height: 600,
+    //   width: 600
+    //   };
+    
+    //   Plotly.newPlot('chart2', data, layout);
   })
       
 }
-
-// d3.json("/api/v1.0/az_droughts").then(data=>{
-
-
-//   console.log(data)
+function droughtBar(year,county){
+  d3.json("/api/v1.0/az_droughts").then(data=>{
 
 
+    console.log(data)
+
+    var droughtFilter=data.filter(drg=>drg.Year==year && drg.County==county)
 
 
+    // var condition=droughtFilter.map(d=>d.Condition)
+
+    // var  count=droughtFilter.map(d=>d.Count)
 
 
+    // console.log(condition)
+    // console.log(count)
+
+    var data = [{
+      type: 'bar',
+      x: droughtFilter.map(d=>d.Condition),
+
+      y: droughtFilter.map(d=>d.Count),
+      marker: {
+        color: 'blue',
+        width: 1
+      },
 
 
-// })
-// var dropdown=d3.select("#selectYear");
+      
+      
+      
+    }];
 
-//   yearsArray.forEach(ye=>{
-
-//   console.log(ye)
-
-//   dropdown.append("option").text(ye).property("value",ye);
-
-//   // var year=y;
-
-//   // console.log(year)\
-  
-
-//  })
- 
-// var dropdown=d3.select("#selectCountyLine");
-//  countyName.forEach(co=>{
-// //  console.log(c)
-//  dropdown.append("option").text(co).property("value",co);
-
-
-//  })
-
-
-
-
-
+    var layout = {
+      title: 'Level of Drought by Year&County',
+      
+    };
+    
+    Plotly.newPlot('chart2', data,layout);
 
 
 
+
+
+  })
+
+}
 
 
 
@@ -320,8 +328,12 @@ function optionChanged(selectedYear,selectedCounty){
 
   initialChart(selectedYear,selectedCounty)
 
+  droughtBar(selectedYear,selectedCounty)
+
 
 }
   
 
 initialChart(2005,"Coconino")
+
+droughtBar(2005,"Yavapai")
