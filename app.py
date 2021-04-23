@@ -40,11 +40,6 @@ def home():
 
   return render_template("index.html")
 
-@app.route("/data")
-def data_page():
-
-  return render_template("data.html")
-
 
 #---------------------------------
 # API
